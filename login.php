@@ -12,6 +12,8 @@
 	ログインしてください：ログインしていない状態で他のページに遷移した場合(ログイン画面に遷移し上記を表示)
 */
 //⑥セッションを開始する
+session_start();
+session_regenerate_id(true);
 
 //①名前とパスワードを入れる変数を初期化する
 $name = '';
@@ -22,28 +24,33 @@ $password = '';
  * 押されていた場合はif文の中の処理を行う
  */
 if (isset($_POST['decision']) && $_POST['decision'] == 1) {
-// 	/*
-// 	 * ③名前とパスワードが両方とも入力されているかを判定する。
-// 	 * 入力されていた場合はif文の中の処理を行う。
-// 	 */
-// 	if (/* ③の処理を書く */) {
-// 		//④名前とパスワードにPOSTで送られてきた名前とパスワードを設定する
-// 	} else {
-// 		//⑤名前かパスワードが入力されていない場合は、「名前かパスワードが未入力です」という文言をメッセージを入れる変数に設定する
-// 	}
+    /*
+	 * ③名前とパスワードが両方とも入力されているかを判定する。
+	 * 入力されていた場合はif文の中の処理を行う。
+	 */
+    if (!empty($_POST['name'] && !empty($_POST['pass']))) {
+        //④名前とパスワードにPOSTで送られてきた名前とパスワードを設定する
+        $name = $_POST['name'];
+        $password = $_POST['pass'];
+    } else {
+        //⑤名前かパスワードが入力されていない場合は、「名前かパスワードが未入力です」という文言をメッセージを入れる変数に設定する
+    }
 }
 
 //⑦名前が入力されているか判定する。入力されていた場合はif文の中に入る
-// if (/* ⑦の処理を書く */) {
-// 	//⑧名前に「yse」、パスワードに「2021」と設定されているか確認する。設定されていた場合はif文の中に入る
-// 	if (/* ⑧の処理を書く */){
-// 		//⑨SESSIONに名前を設定し、SESSIONの「login」フラグをtrueにする
-// 		//⑩在庫一覧画面へ遷移する
-// 		header(/* ⑩の遷移先を書く */);
-// 	}else{
-// 		//⑪名前もしくはパスワードが間違っていた場合は、「ユーザー名かパスワードが間違っています」という文言をメッセージを入れる変数に設定する
-// 	}
-// }
+if ($name && $password) {
+    //⑧名前に「yse」、パスワードに「2021」と設定されているか確認する。設定されていた場合はif文の中に入る
+    if ($name == 'yse' && $password == '2021') {
+        //⑨SESSIONに名前を設定し、SESSIONの「login」フラグをtrueにする
+        $_SESSION['login'] = true;
+        $_SESSION['name'] = $name;
+        //⑩在庫一覧画面へ遷移する
+        header('Location: zaiko_ichiran.php');
+    } else {
+        //⑪名前もしくはパスワードが間違っていた場合は、「ユーザー名かパスワードが間違っています」という文言をメッセージを入れる変数に設定する
+        $error_message = 'ユーザー名かパスワードが間違っています';
+    }
+}
 
 //⑫SESSIONの「error2」に値が入っているか判定する。入っていた場合はif文の中に入る
 // if (/* ⑫の処理を書く */) {
@@ -53,34 +60,33 @@ if (isset($_POST['decision']) && $_POST['decision'] == 1) {
 ?>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-<meta charset="UTF-8">
-<title>ログイン</title>
-<link rel="stylesheet" href="css/login.css" type="text/css" />
+    <meta charset="UTF-8">
+    <title>ログイン</title>
+    <link rel="stylesheet" href="css/login.css" type="text/css" />
 </head>
+
 <body id="login">
-	<div id="main">
-		<h1>ログイン</h1>
-		<?php
-		//⑮エラーメッセージの変数に入っている値を表示する
-		// echo "<div id='error'>", /* ⑮の変数を書く */, "</div>";
-		
-		//⑯メッセージの変数に入っている値を表示する
-		// echo "<div id='msg'>", /* ⑯の変数を書く */, "</div>";
-		?>
-		<form action="login.php" method="post" id="log">
-			<p>
-				<input type='text' name="name" size='5' placeholder="Username">
-			</p>
-			<p>
-				<input type='password' name='pass' size='5' maxlength='20'
-					placeholder="Password">
-			</p>
-			<p>
-				<button type="submit" formmethod="POST" name="decision" value="1"
-					id="button">Login</button>
-			</p>
-		</form>
-	</div>
+    <div id="main">
+        <h1>ログイン</h1>
+        <!-- //⑮エラーメッセージの変数に入っている値を表示する -->
+        <?= @$error_message ?>
+
+        <!-- //⑯メッセージの変数に入っている値を表示する -->
+
+        <form action="login.php" method="post" id="log">
+            <p>
+                <input type='text' name="name" size='5' placeholder="Username">
+            </p>
+            <p>
+                <input type='password' name='pass' size='5' maxlength='20' placeholder="Password">
+            </p>
+            <p>
+                <button type="submit" formmethod="POST" name="decision" value="1" id="button">Login</button>
+            </p>
+        </form>
+    </div>
 </body>
+
 </html>
