@@ -1,14 +1,4 @@
 <?php
-/* 
-【機能】
-入荷で入力された個数を表示する。入荷を実行した場合は対象の書籍の在庫数に入荷数を加
-えた数でデータベースの書籍の在庫数を更新する。
-
-【エラー一覧（エラー表示：発生条件）】
-なし
-*/
-
-//①セッションを開始する
 session_start();
 
 function getByid($id, $con)
@@ -23,15 +13,12 @@ function updateByid($id, $con, $total)
     $con->query($sql);
 }
 
-//⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
 if (empty($_SESSION['login'])) {
     $_SESSION['error2'] = 'ログインしてください';
     header('Location: login.php');
     exit;
 }
 
-//⑧データベースへ接続し、接続情報を変数に保存する
-//⑨データベースで使用する文字コードを「UTF8」にする
 $db_name = 'zaiko2021_yse';
 $db_host = 'localhost';
 $db_port = '3306';

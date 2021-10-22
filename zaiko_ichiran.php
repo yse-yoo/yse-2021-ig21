@@ -61,23 +61,14 @@ function getBooks($pdo, $limit = 20, $offset = 0)
         <div id="pagebody">
             <!-- エラーメッセージ表示 -->
             <div id="error">
-                <?php
-                /*
-				 * ⑧SESSIONの「success」にメッセージが設定されているかを判定する。
-				 * 設定されていた場合はif文の中に入る。
-				 */
-                // if(/* ⑧の処理を書く */){
-                // 	//⑨SESSIONの「success」の中身を表示する。
-                // }
-                ?>
+                <?= @$_SESSION['success'] ?>
             </div>
 
             <!-- 左メニュー -->
             <div id="left">
                 <p id="ninsyou_ippan">
-                    <?php
-                    echo @$_SESSION["account_name"];
-                    ?><br>
+                    <?= @$_SESSION["account_name"] ?>
+                    <br>
                     <button type="button" id="logout" onclick="location.href='logout.php'">ログアウト</button>
                 </p>
                 <button type="submit" id="btn1" formmethod="POST" name="decision" value="3" formaction="nyuka.php">入荷</button>
