@@ -8,6 +8,7 @@ if (empty($_SESSION['login'])){
 }
 
 if (isset($_SESSION['error'])) unset($_SESSION['error']);
+if (isset($_SESSION['success'])) unset($_SESSION['success']);
 
 //⑤データベースへ接続し、接続情報を変数に保存する
 //⑥データベースで使用する文字コードを「UTF8」にする
@@ -27,12 +28,13 @@ try {
 }
 
 //⑦書籍テーブルから書籍情報を取得するSQLを実行する。また実行結果を変数に保存する
-$books = getBooks($pdo);
-
-function getBooks($pdo, $limit = 20, $offset = 0)
+function getBooks($pdo, $limit = 0, $offset = 0)
 {
-    // $sql = "SELECT * FROM books LIMIT {$limit}";
-    $sql = "SELECT * FROM books";
+    if ($limit > 0) {
+        $sql = "SELECT * FROM books LIMIT {$limit} OFFSET {$offset}";
+    } else {
+        $sql = "SELECT * FROM books";
+    }
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     // return $stmt;
@@ -61,7 +63,7 @@ function getBooks($pdo, $limit = 20, $offset = 0)
         <div id="pagebody">
             <!-- エラーメッセージ表示 -->
             <div id="error">
-                <?= @$_SESSION['success'] ?>
+                <?= @$message ?>
             </div>
 
             <!-- 左メニュー -->
@@ -74,6 +76,10 @@ function getBooks($pdo, $limit = 20, $offset = 0)
                 <button type="submit" id="btn1" formmethod="POST" name="decision" value="3" formaction="nyuka.php">入荷</button>
 
                 <button type="submit" id="btn1" formmethod="POST" name="decision" value="4" formaction="syukka.php">出荷</button>
+
+                <button type="submit" id="btn1" formmethod="POST" name="decision" value="3" formaction="new_product.php">商品追加</button>
+
+                <button type="submit" id="btn1" formmethod="POST" name="decision" value="4" formaction="delete_product.php">商品削除</button>
             </div>
             <!-- 中央表示 -->
             <div id="center">
@@ -92,7 +98,7 @@ function getBooks($pdo, $limit = 20, $offset = 0)
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($books as $book) : ?>
+                        <?php foreach (getBooks($pdo, 20, 0) as $book) : ?>
                             <?php extract($book); ?>
                             <tr id="book">
                                 <td id="check"><input type="checkbox" name="books[]" value="<?= $book['id'] ?>"></td>

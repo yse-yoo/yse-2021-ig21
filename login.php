@@ -43,7 +43,7 @@ if ($name && $password) {
     if ($name == 'yse' && $password == '2021') {
         //⑨SESSIONに名前を設定し、SESSIONの「login」フラグをtrueにする
         $_SESSION['login'] = true;
-        $_SESSION['name'] = $name;
+        $_SESSION['account_name'] = $name;
         //⑩在庫一覧画面へ遷移する
         header('Location: zaiko_ichiran.php');
     } else {
