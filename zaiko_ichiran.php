@@ -28,13 +28,14 @@ try {
 }
 
 //⑦書籍テーブルから書籍情報を取得するSQLを実行する。また実行結果を変数に保存する
-function getBooks($pdo, $limit = 0, $offset = 0)
+function getBooks($pdo, $limit = 0, $offset = null)
 {
-    if ($limit > 0) {
-        $sql = "SELECT * FROM books LIMIT {$limit} OFFSET {$offset}";
-    } else {
-        $sql = "SELECT * FROM books";
-    }
+    $sql = "SELECT * FROM books";
+    // if ($limit > 0) {
+    //     $sql = "SELECT * FROM books LIMIT {$limit} OFFSET {$offset}";
+    // } else {
+    //     $sql = "SELECT * FROM books";
+    // }
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     // return $stmt;
@@ -77,7 +78,7 @@ function getBooks($pdo, $limit = 0, $offset = 0)
 
                 <button type="submit" id="btn1" formmethod="POST" name="decision" value="4" formaction="syukka.php">出荷</button>
 
-                <button type="submit" id="btn1" formmethod="POST" name="decision" value="3" formaction="new_product.php">商品追加</button>
+                <button type="submit" id="btn1" formmethod="POST" name="decision" value="3" formaction="new_product.php">新商品追加</button>
 
                 <button type="submit" id="btn1" formmethod="POST" name="decision" value="4" formaction="delete_product.php">商品削除</button>
             </div>
@@ -100,14 +101,14 @@ function getBooks($pdo, $limit = 0, $offset = 0)
                     <tbody>
                         <?php foreach (getBooks($pdo, 20, 0) as $book) : ?>
                             <?php extract($book); ?>
-                            <tr id="book">
-                                <td id="check"><input type="checkbox" name="books[]" value="<?= $book['id'] ?>"></td>
-                                <td id="id"><?= $id ?></td>
-                                <td id="title"><?= $title ?></td>
-                                <td id="author"><?= $author ?></td>
-                                <td id="date"><?= $salesDate ?></td>
-                                <td id="price"><?= $price ?></td>
-                                <td id="stock"><?= $stock ?></td>
+                            <tr>
+                                <td><input type="checkbox" name="books[]" value="<?= $book['id'] ?>"></td>
+                                <td><?= $id ?></td>
+                                <td><?= $title ?></td>
+                                <td><?= $author ?></td>
+                                <td><?= $salesDate ?></td>
+                                <td><?= $price ?></td>
+                                <td><?= $stock ?></td>
                             </tr>
                         <?php endforeach ?>
                     </tbody>
