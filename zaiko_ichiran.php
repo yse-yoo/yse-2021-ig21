@@ -7,8 +7,13 @@ if (empty($_SESSION['login'])){
     exit;
 }
 
-if (isset($_SESSION['error'])) unset($_SESSION['error']);
-if (isset($_SESSION['success'])) unset($_SESSION['success']);
+if (isset($_SESSION['error'])) {
+    unset($_SESSION['error']);
+}
+if (isset($_SESSION['success'])) {
+    $error_message = $_SESSION['success'];
+    unset($_SESSION['success']);
+}
 
 //⑤データベースへ接続し、接続情報を変数に保存する
 //⑥データベースで使用する文字コードを「UTF8」にする
@@ -30,12 +35,11 @@ try {
 //⑦書籍テーブルから書籍情報を取得するSQLを実行する。また実行結果を変数に保存する
 function getBooks($pdo, $limit = 0, $offset = null)
 {
-    $sql = "SELECT * FROM books";
-    // if ($limit > 0) {
-    //     $sql = "SELECT * FROM books LIMIT {$limit} OFFSET {$offset}";
-    // } else {
-    //     $sql = "SELECT * FROM books";
-    // }
+    if ($limit > 0) {
+        $sql = "SELECT * FROM books LIMIT {$limit} OFFSET {$offset}";
+    } else {
+        $sql = "SELECT * FROM books";
+    }
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     // return $stmt;
@@ -64,7 +68,7 @@ function getBooks($pdo, $limit = 0, $offset = null)
         <div id="pagebody">
             <!-- エラーメッセージ表示 -->
             <div id="error">
-                <?= @$message ?>
+                <?= @$error_message ?>
             </div>
 
             <!-- 左メニュー -->
@@ -99,7 +103,7 @@ function getBooks($pdo, $limit = 0, $offset = null)
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach (getBooks($pdo, 20, 0) as $book) : ?>
+                        <?php foreach (getBooks($pdo, 0, 0) as $book) : ?>
                             <?php extract($book); ?>
                             <tr>
                                 <td><input type="checkbox" name="books[]" value="<?= $book['id'] ?>"></td>

@@ -18,6 +18,7 @@ session_regenerate_id(true);
 //①名前とパスワードを入れる変数を初期化する
 $name = '';
 $password = '';
+$error_message = '';
 
 /*
  * ②ログインボタンが押されたかを判定する。
@@ -34,6 +35,7 @@ if (isset($_POST['decision']) && $_POST['decision'] == 1) {
         $password = $_POST['pass'];
     } else {
         //⑤名前かパスワードが入力されていない場合は、「名前かパスワードが未入力です」という文言をメッセージを入れる変数に設定する
+        $error_message = '名前かパスワードが未入力です';
     }
 }
 
@@ -53,10 +55,12 @@ if ($name && $password) {
 }
 
 //⑫SESSIONの「error2」に値が入っているか判定する。入っていた場合はif文の中に入る
-// if (/* ⑫の処理を書く */) {
-// 	//⑬SESSIONの「error2」の値をエラーメッセージを入れる変数に設定する。
-// 	//⑭SESSIONの「error2」にnullを入れる。
-// }
+if (isset($_SESSION['error2'])) {
+	//⑬SESSIONの「error2」の値をエラーメッセージを入れる変数に設定する。
+    $error_message = $_SESSION['error2'];
+	//⑭SESSIONの「error2」にnullを入れる。
+    $_SESSION['error2'] = null;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -70,10 +74,9 @@ if ($name && $password) {
 <body id="login">
     <div id="main">
         <h1>ログイン</h1>
-        <!-- //⑮エラーメッセージの変数に入っている値を表示する -->
-        <?= @$error_message ?>
-
-        <!-- //⑯メッセージの変数に入っている値を表示する -->
+        <div id="error">
+        <?= $error_message ?>
+        </div>
 
         <form action="login.php" method="post" id="log">
             <p>

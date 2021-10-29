@@ -44,7 +44,7 @@ foreach ($_POST['books'] as $index => $book_id) {
     $book = getByid($book_id, $pdo);
     $total_stock = $book['stock'] - $stock;
     if ($total_stock < 0) {
-        $_SESSION['error'] = '最大在庫数を超える数は入力できません';
+        $_SESSION['error'] = '出荷する個数が在庫数を超えています';
         include 'syukka.php';
         exit;
     }
