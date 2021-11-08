@@ -19,6 +19,14 @@ if (empty($_SESSION['login'])) {
     exit;
 }
 
+if (empty($_POST['books'])) {
+    //⑨SESSIONの「success」に「入荷する商品が選択されていません」と設定する。
+    $_SESSION['success'] = '入荷する商品が選択されていません';
+    //⑩在庫一覧画面へ遷移する。
+    header('Location: zaiko_ichiran.php');
+    exit;
+}
+
 $db_name = 'zaiko2021_yse';
 $db_host = 'localhost';
 $db_port = '3306';
