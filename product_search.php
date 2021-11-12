@@ -54,8 +54,10 @@ $options['price'] = Book::$priceOptions;
                                     <option value="">----</option>
                                     <option value="400">400円台</option>
                                     <option value="500">500円台</option>
-                                    <option value="700">600円台</option>
-                                    <option value="800">700円台</option>
+                                    <option value="600">600円台</option>
+                                    <option value="700">700円台</option>
+                                    <option value="800">800円台</option>
+                                    <option value="900">900円台</option>
                                     <option value="1000">1000円台</option>
                                     <option value="2000">2000円台</option>
                                 </select>
