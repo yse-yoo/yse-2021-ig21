@@ -1,13 +1,14 @@
 @charset "utf-8";
 
 @font-face{
-	font-family:"huifont";
+	/* font-family:"huifont"; */
 	src: url('font/HuiFontP109.ttf');
 }
 
 body{
 	min-width:1700px;
 	font-family:"huifont";
+    font-size: 12px;
 	margin:auto;
 	background-color:#f4fff9;
 	color:#404040;
@@ -156,6 +157,7 @@ td{
 
 th{
 	font-size: 20px;
+    font-size: 14px;
 	background:#7fffbf;
 	border:2px #404040 solid;
 	padding:10px;

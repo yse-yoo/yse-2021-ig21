@@ -39,17 +39,24 @@ $searchs = check($_GET);
 function getBooks($pdo, $searchs)
 {
     $conditions = [];
-    //TODO model
-    //TODO function
+
     //keyword
-    if ($searchs['keyword']) {
-        $conditions[] = "title LIKE '%{$searchs['keyword']}%'";
+    if (!empty($_GET['keyword'])) {
+        $conditions[] = "(title LIKE '%{$searchs['keyword']}%' OR author LIKE '%{$searchs['keyword']}%')";
+    }
+    //year
+    if (is_numeric($_GET['year'])) {
+        $start_year = $_GET['year'];
+        $end_year = $start_year + 10;
+        $conditions[] = "salesDate >= '{$start_year}年1月1日'";
+        $conditions[] = "salesDate < '{$end_year}年1月1日'";
     }
     //price
-    if (is_numeric($searchs['price'])) {
-        $index = $_GET['price'];
-        $prices = Book::$priceOptions[$index];
-        $conditions[] = " price >= {$prices[0]} AND price < {$prices[1]}";
+    if (is_numeric($_GET['price'])) {
+        $start_price = $_GET['price'];
+        $end_price = ($start_price >= 1000) ? $start_price + 1000 : $start_price + 100;
+        $conditions[] = " price >= {$start_price}";
+        $conditions[] = " price < {$end_price}";
     }
 
     $sql = "SELECT * FROM books";
@@ -58,6 +65,7 @@ function getBooks($pdo, $searchs)
         $sql .= " WHERE {$condition}";
     }
 
+    var_dump($sql);
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $books = [];
@@ -79,10 +87,17 @@ function getBooks($pdo, $searchs)
 
 <body>
     <div id="header">
-        <h1>書籍一覧</h1>
+        <h1>商品検索</h1>
     </div>
     <form action="zaiko_ichiran.php" method="post" id="myform" name="myform">
         <div id="pagebody">
+            <div id="menu">
+                <nav>
+                    <ul>
+                        <li><a href="zaiko_ichiran.php?page=0">書籍一覧</a></li>
+                    </ul>
+                </nav>
+            </div>
             <!-- エラーメッセージ表示 -->
             <div id="error">
                 <?= @$error_message ?>
